@@ -1,6 +1,6 @@
 CC = gcc
 FLAGS = -Wall -g
-LIBOBJECTS = basicMath.o power.o myMath.h
+OBJECTS = basicMath.o power.o myMath.h
 
 all:mains maind mymathd mymaths
 
@@ -10,10 +10,10 @@ mains: main.o mymaths
 maind:main.o mymathd
 	$(CC) $(FLAGS) -o maind main.o ./libmyMath.so
 
-mymaths:$(LIBOBJECTS) 
-	ar -rcs libmyMath.a $(LIBOBJECTS)
+mymaths:$(OBJECTS) 
+	ar -rcs libmyMath.a $(OBJECTS)
 
-mymathd:$(LIBOBJECTS)
+mymathd:$(OBJECTS)
 	$(CC) -shared -o libmyMath.so -fPIC basicMath.c power.c
 
 main.o:main.c myMath.h
