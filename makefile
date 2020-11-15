@@ -1,31 +1,28 @@
-CC = gcc
-FLAG = -Wall -g
-LIBS=power.o basicMath.o
+all:mymaths mymathd mains maind
 
-all: mains maind libmyMath.so libmyMath.a 
+maind:main.o 
+	gcc -Wall -g -o maind main.o ./libmyMath.so
 
-mains: main.o libmyMath.a
-	$(CC) $(FLAG) -o mains main.o libmyMath.a
+mains:main.o  libmyMath.a 
+	gcc -Wall -g -o  mains main.o libmyMath.a 
 
-maind: main.o
-	$(CC) $(FLAG) -o maind main.o ./libmyMath.so
-	
-libmyMath.a: $(LIBS)
-	ar -rcs libmyMath.a $(LIBS)
+mymaths:libmyMath.a
+mymathd:libmyMath.so
 
-libmyMath.so: $(LIBS)
-	$(CC) -shared -o libmyMath.so $(LIBS)
+libmyMath.a:basicMath.o power.o myMath.h
+	ar -rcs libmyMath.a basicMath.o power.o myMath.h 
 
-power.o:  power.c myMath.h
-	$(CC) $(FLAG) -c power.c
-	
-basicMath.o: basicMath.c myMath.h
-		$(CC) $(FLAG) -c basicMath.c
+libmyMath.so:basicMath.o power.o myMath.h
+	gcc -shared -o libmyMath.so basicMath.o power.o myMath.h
 
-main.o: main.c myMath.h
-	$(CC) $(FLAG) -c main.c
-	
-.PHONY: clean all
+basicMath.o:basicMath.c
+	gcc -Wall -g -c basicMath.c
 
- clean:
-	rm -f *.o *.a *.so mains maind
+power.o:power.c
+	gcc -Wall -g -c power.c
+
+main.o:main.c myMath.h
+	gcc -Wall -g -c main.c
+
+clean:
+	rm -f *.o *.a *.so maind mains
