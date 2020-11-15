@@ -6,13 +6,12 @@ void f1(double x){
     double result;
     double a=Exponent((int)x);
     double b=power(x,3);
-    int c=-2;
     result=add(a,b-2);
     printf("the value of f(x)= e^x + x^3 -2 at the point %lf is %.4lf\n" , x ,result);
     
 }
 
-double f2(double x){
+void f2(double x){
     double result;
     double a=mul(3,(float)x);
     double b=power(x,3);
@@ -22,7 +21,7 @@ double f2(double x){
 
 }
 
-double f3(double x){
+void f3(double x){
     double result;
     double a=power(x ,3);
     a=mul(4,a);
@@ -33,13 +32,15 @@ double f3(double x){
 
 }
 
-void main () {
+int main () {
     double x;
     printf("please insert a real number\n");
     scanf("%lf" , &x);
     f1(x);
     f2(x);
     f3(x);
+
+    return 0;
 
 }
 
