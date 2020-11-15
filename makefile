@@ -1,28 +1,33 @@
-all:mymaths mymathd mains maind
+CC = gcc
+FLAGS = -Wall -g
+LIBOBJECTS = basicMath.o power.o myMath.h
 
-maind:main.o 
-	gcc -Wall -g -o maind main.o ./libmyMath.so
+all:mains maind mymathd mymaths
 
-mains:main.o  libmyMath.a 
-	gcc -Wall -g -o  mains main.o libmyMath.a 
+mains: main.o mymaths
+	$(CC) $(FLAGS) -o mains main.o libmyMath.a
 
-mymaths:libmyMath.a
-mymathd:libmyMath.so
+maind:main.o mymathd
+	$(CC) $(FLAGS) -o maind main.o ./libmyMath.so
 
-libmyMath.a:basicMath.o power.o myMath.h
-	ar -rcs libmyMath.a basicMath.o power.o myMath.h 
+mymaths:$(LIBOBJECTS) 
+	ar -rcs libmyMath.a $(LIBOBJECTS)
 
-libmyMath.so:basicMath.o power.o myMath.h
-	gcc -shared -o libmyMath.so basicMath.o power.o myMath.h
-
-basicMath.o:basicMath.c
-	gcc -Wall -g -c basicMath.c
-
-power.o:power.c
-	gcc -Wall -g -c power.c
+mymathd:$(LIBOBJECTS)
+	$(CC) -shared -o libmyMath.so -fPIC basicMath.c power.c
 
 main.o:main.c myMath.h
-	gcc -Wall -g -c main.c
+	$(CC) $(FLAGS) -c main.c
 
+basicMath.o:basicMath.c
+	$(CC) $(FLAGS)  -c basicMath.c
+
+power.o: power.c
+	$(CC) $(FLAGS) -c power.c	
+
+
+
+
+.PHONY:clean all
 clean:
-	rm -f *.o *.a *.so maind mains
+	rm -f *.o mains maind libmyMath.a libmyMath.so
